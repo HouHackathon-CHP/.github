@@ -403,7 +403,7 @@ flowchart TB
     DEV["Developer\nPush / Pull Request (dev / main)"]
     DEV -->|Every PR / Push| CI["ci.yml\nUnit Tests + License Audit + Build Check"]
     DEV -->|Merge main / Tag| CL["changelog.yml\ngit-cliff generates CHANGELOG.md"]
-    DEV -->|Push main (opencity-documents)| DOCS["docs.yml\nmkdocs build --strict to gh-pages"]
+    DEV -->|Push main opencity-documents| DOCS["docs.yml\nmkdocs build --strict to gh-pages"]
 ```
 
 - **Automated Testing & License Audit (`ci.yml`):** Runs `pytest`, `check_direct_licenses.py`, `npm run check:catalog`, `npm run check:licenses`, and `npm run build` on every PR.

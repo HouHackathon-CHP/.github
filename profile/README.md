@@ -403,7 +403,7 @@ flowchart TB
     DEV["Developer\nPush / Pull Request (dev / main)"]
     DEV -->|Mọi PR / Push| CI["ci.yml\nUnit Tests + License Audit + Build Check"]
     DEV -->|Merge main / Tag| CL["changelog.yml\ngit-cliff tự sinh CHANGELOG.md"]
-    DEV -->|Push main (opencity-documents)| DOCS["docs.yml\nmkdocs build --strict to gh-pages"]
+    DEV -->|Push main opencity-documents| DOCS["docs.yml\nmkdocs build --strict to gh-pages"]
 ```
 
 - **Kiểm thử & Kiểm toán Giấy phép (`ci.yml`):** Chạy `pytest`, `check_direct_licenses.py`, `npm run check:catalog`, `npm run check:licenses` và `npm run build` tự động trên mỗi PR.
