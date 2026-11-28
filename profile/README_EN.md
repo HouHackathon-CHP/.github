@@ -67,34 +67,34 @@ The ecosystem enforces a **Strict 3-Layer Architecture** with clear network boun
 ```mermaid
 flowchart TB
     subgraph Clients["Layer 3 — End-User Applications"]
-        WEB["opencity-frontend<br/>React 19 + MapLibre 2D/3D"]
-        MOB["opencity-mobile<br/>Kotlin + Jetpack Compose"]
+        WEB["opencity-frontend\nReact 19 + MapLibre 2D/3D"]
+        MOB["opencity-mobile\nKotlin + Jetpack Compose"]
     end
 
     subgraph CoreEdge["Layer 1 — Security Edge (Public)"]
-        KC["Keycloak 26.4 (:8081)<br/>OIDC PKCE + 17 Roles"]
-        GW["API Gateway (:8000)<br/>Verify JWT + X-DXOS-*"]
+        KC["Keycloak 26.4 (:8081)\nOIDC PKCE + 17 Roles"]
+        GW["API Gateway (:8000)\nVerify JWT + X-DXOS-*"]
     end
 
     subgraph Domain["Layer 2 — Civic Domain & AI"]
-        API["opencity-backend<br/>FastAPI + SQLite + WAQI/OSM"]
-        AI["opencity-ai<br/>PhoBERT + Wav2Vec2 ASR"]
+        API["opencity-backend\nFastAPI + SQLite + WAQI/OSM"]
+        AI["opencity-ai\nPhoBERT + Wav2Vec2 ASR"]
     end
 
     subgraph CoreServices["Layer 1 — Core Services (Internal)"]
-        DATA["Data Service<br/>PostgreSQL 16 + S3"]
-        WF["Workflow Engine<br/>State-Graph + Audit"]
-        INS["Insight Service<br/>Naive Bayes + TF-IDF"]
+        DATA["Data Service\nPostgreSQL 16 + S3"]
+        WF["Workflow Engine\nState-Graph + Audit"]
+        INS["Insight Service\nNaive Bayes + TF-IDF"]
     end
 
-    WEB -->|"1. Sign in OIDC"| KC
-    MOB -->|"2. Bearer JWT"| GW
-    KC <-->|"3. Verify JWKS"| GW
-    GW -->|"4. /api/opencity/*"| API
-    API <-->|"5. NLP & ASR"| AI
-    API -->|"6. Persist DB & S3"| DATA
-    API -->|"7. State-Graph"| WF
-    API -->|"8. Triage Hint"| INS
+    WEB -->|1. Sign in OIDC| KC
+    MOB -->|2. Bearer JWT| GW
+    KC <-->|3. Verify JWKS| GW
+    GW -->|4. Forward /api/opencity| API
+    API <-->|5. NLP & ASR| AI
+    API -->|6. Persist DB & S3| DATA
+    API -->|7. State-Graph| WF
+    API -->|8. Triage Hint| INS
 ```
 
 ### Key Architectural Highlights
@@ -292,29 +292,29 @@ opencity-documents/
 ```mermaid
 flowchart TB
     subgraph Sources["1. Input Data Sources"]
-        OSM["OpenStreetMap<br/>184 Bus Routes & 5,052 Stops"]
-        WARD["Hanoi Boundaries<br/>126 Wards GeoJSON"]
-        WAQI["WAQI Network<br/>7 Stations (15-min Sync)"]
-        USER["Citizens (Web/App)<br/>Photos + GPS + Voice"]
+        OSM["OpenStreetMap\n184 Bus Routes & 5,052 Stops"]
+        WARD["Hanoi Boundaries\n126 Wards GeoJSON"]
+        WAQI["WAQI Network\n7 Stations (15-min Sync)"]
+        USER["Citizens (Web/App)\nPhotos + GPS + Voice"]
     end
 
     subgraph Ingestion["2. Ingestion & Processing"]
-        INIT["Startup Seeding<br/>Load GeoJSON on boot"]
-        GW_DATA["API Gateway<br/>HTTPS + OIDC RS256"]
-        BE["OpenCity Backend<br/>FastAPI Services"]
+        INIT["Startup Seeding\nLoad GeoJSON on boot"]
+        GW_DATA["API Gateway\nHTTPS + OIDC RS256"]
+        BE["OpenCity Backend\nFastAPI Services"]
     end
 
     subgraph StorageAI["3. Storage & AI"]
-        SQLITE[("SQLite<br/>wards / bus / aqi")]
-        CORE[("DX-OS Core<br/>PostgreSQL + SeaweedFS S3")]
-        AI_DATA["OpenCity AI<br/>PhoBERT + Wav2Vec2"]
+        SQLITE[("SQLite\nwards / bus / aqi")]
+        CORE[("DX-OS Core\nPostgreSQL + SeaweedFS S3")]
+        AI_DATA["OpenCity AI\nPhoBERT + Wav2Vec2"]
     end
 
-    OSM -->|"GeoJSON"| INIT
-    WARD -->|"GeoJSON"| INIT
+    OSM -->|GeoJSON| INIT
+    WARD -->|GeoJSON| INIT
     INIT --> SQLITE
-    WAQI -->|"REST Sync"| BE
-    USER -->|"Bearer JWT"| GW_DATA
+    WAQI -->|REST Sync| BE
+    USER -->|Bearer JWT| GW_DATA
     GW_DATA --> BE
     BE --> CORE
     BE <--> AI_DATA
@@ -400,10 +400,10 @@ Every repository in `HouHackathon-CHP` uses **GitHub Actions** for automated qua
 
 ```mermaid
 flowchart TB
-    DEV["Developer<br/>Push / Pull Request (dev / main)"]
-    DEV -->|"Every PR / Push"| CI["ci.yml<br/>Unit Tests + License Audit + Build Check"]
-    DEV -->|"Merge main / Tag"| CL["changelog.yml<br/>git-cliff generates CHANGELOG.md"]
-    DEV -->|"Push main (opencity-documents)"| DOCS["docs.yml<br/>mkdocs build --strict -> gh-pages"]
+    DEV["Developer\nPush / Pull Request (dev / main)"]
+    DEV -->|Every PR / Push| CI["ci.yml\nUnit Tests + License Audit + Build Check"]
+    DEV -->|Merge main / Tag| CL["changelog.yml\ngit-cliff generates CHANGELOG.md"]
+    DEV -->|Push main (opencity-documents)| DOCS["docs.yml\nmkdocs build --strict to gh-pages"]
 ```
 
 - **Automated Testing & License Audit (`ci.yml`):** Runs `pytest`, `check_direct_licenses.py`, `npm run check:catalog`, `npm run check:licenses`, and `npm run build` on every PR.

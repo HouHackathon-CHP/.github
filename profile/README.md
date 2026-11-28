@@ -67,34 +67,34 @@ Hệ sinh thái tuân thủ mô hình **Strict 3-Layer Architecture** với ranh
 ```mermaid
 flowchart TB
     subgraph Clients["Lớp 3 — Ứng dụng Đầu cuối"]
-        WEB["opencity-frontend<br/>React 19 + MapLibre 2D/3D"]
-        MOB["opencity-mobile<br/>Kotlin + Jetpack Compose"]
+        WEB["opencity-frontend\nReact 19 + MapLibre 2D/3D"]
+        MOB["opencity-mobile\nKotlin + Jetpack Compose"]
     end
 
     subgraph CoreEdge["Lớp 1 — Cửa ngõ Bảo mật (Công khai)"]
-        KC["Keycloak 26.4 (:8081)<br/>OIDC PKCE + 17 Vai trò"]
-        GW["API Gateway (:8000)<br/>Verify JWT + X-DXOS-*"]
+        KC["Keycloak 26.4 (:8081)\nOIDC PKCE + 17 Vai trò"]
+        GW["API Gateway (:8000)\nVerify JWT + X-DXOS-*"]
     end
 
     subgraph Domain["Lớp 2 — Nghiệp vụ Đô thị & AI"]
-        API["opencity-backend<br/>FastAPI + SQLite + WAQI/OSM"]
-        AI["opencity-ai<br/>PhoBERT + Wav2Vec2 ASR"]
+        API["opencity-backend\nFastAPI + SQLite + WAQI/OSM"]
+        AI["opencity-ai\nPhoBERT + Wav2Vec2 ASR"]
     end
 
     subgraph CoreServices["Lớp 1 — Dịch vụ Lõi (Nội bộ)"]
-        DATA["Data Service<br/>PostgreSQL 16 + S3"]
-        WF["Workflow Engine<br/>State-Graph + Audit"]
-        INS["Insight Service<br/>Naive Bayes + TF-IDF"]
+        DATA["Data Service\nPostgreSQL 16 + S3"]
+        WF["Workflow Engine\nState-Graph + Audit"]
+        INS["Insight Service\nNaive Bayes + TF-IDF"]
     end
 
-    WEB -->|"1. Đăng nhập OIDC"| KC
-    MOB -->|"2. Bearer JWT"| GW
-    KC <-->|"3. Verify JWKS"| GW
-    GW -->|"4. /api/opencity/*"| API
-    API <-->|"5. NLP & ASR"| AI
-    API -->|"6. Lưu DB & S3"| DATA
-    API -->|"7. Trạng thái"| WF
-    API -->|"8. Gợi ý"| INS
+    WEB -->|1. Đăng nhập OIDC| KC
+    MOB -->|2. Bearer JWT| GW
+    KC <-->|3. Verify JWKS| GW
+    GW -->|4. Chuyển tiếp /api/opencity| API
+    API <-->|5. NLP & ASR| AI
+    API -->|6. Lưu DB & S3| DATA
+    API -->|7. Trạng thái| WF
+    API -->|8. Gợi ý| INS
 ```
 
 ### Điểm Độc Đáo Trong Thiết Kế
@@ -292,29 +292,29 @@ opencity-documents/
 ```mermaid
 flowchart TB
     subgraph Sources["1. Nguồn Dữ Liệu Đầu Vào"]
-        OSM["OpenStreetMap<br/>184 Tuyến buýt & 5.052 Điểm dừng"]
-        WARD["Hành chính Hà Nội<br/>126 Xã/Phường GeoJSON"]
-        WAQI["WAQI Network<br/>7 Trạm quan trắc (15 phút)"]
-        USER["Công dân (Web/App)<br/>Ảnh + GPS + Giọng nói"]
+        OSM["OpenStreetMap\n184 Tuyến buýt & 5.052 Điểm dừng"]
+        WARD["Hành chính Hà Nội\n126 Xã/Phường GeoJSON"]
+        WAQI["WAQI Network\n7 Trạm quan trắc (15 phút)"]
+        USER["Công dân (Web/App)\nẢnh + GPS + Giọng nói"]
     end
 
     subgraph Ingestion["2. Tiếp Nhận & Xử Lý"]
-        INIT["Startup Seeding<br/>Nạp GeoJSON khi khởi động"]
-        GW_DATA["API Gateway<br/>HTTPS + OIDC RS256"]
-        BE["OpenCity Backend<br/>FastAPI Services"]
+        INIT["Startup Seeding\nNạp GeoJSON khi khởi động"]
+        GW_DATA["API Gateway\nHTTPS + OIDC RS256"]
+        BE["OpenCity Backend\nFastAPI Services"]
     end
 
     subgraph StorageAI["3. Lưu Trữ & Trí Tuệ Nhân Tạo"]
-        SQLITE[("SQLite<br/>wards / bus / aqi")]
-        CORE[("DX-OS Core<br/>PostgreSQL + SeaweedFS S3")]
-        AI_DATA["OpenCity AI<br/>PhoBERT + Wav2Vec2"]
+        SQLITE[("SQLite\nwards / bus / aqi")]
+        CORE[("DX-OS Core\nPostgreSQL + SeaweedFS S3")]
+        AI_DATA["OpenCity AI\nPhoBERT + Wav2Vec2"]
     end
 
-    OSM -->|"GeoJSON"| INIT
-    WARD -->|"GeoJSON"| INIT
+    OSM -->|GeoJSON| INIT
+    WARD -->|GeoJSON| INIT
     INIT --> SQLITE
-    WAQI -->|"REST Sync"| BE
-    USER -->|"Bearer JWT"| GW_DATA
+    WAQI -->|REST Sync| BE
+    USER -->|Bearer JWT| GW_DATA
     GW_DATA --> BE
     BE --> CORE
     BE <--> AI_DATA
@@ -400,10 +400,10 @@ Tất cả repository trong hệ sinh thái `HouHackathon-CHP` đều tích hợ
 
 ```mermaid
 flowchart TB
-    DEV["Developer<br/>Push / Pull Request (dev / main)"]
-    DEV -->|"Mọi PR / Push"| CI["ci.yml<br/>Unit Tests + License Audit + Build Check"]
-    DEV -->|"Merge main / Tag"| CL["changelog.yml<br/>git-cliff tự sinh CHANGELOG.md"]
-    DEV -->|"Push main (opencity-documents)"| DOCS["docs.yml<br/>mkdocs build --strict -> gh-pages"]
+    DEV["Developer\nPush / Pull Request (dev / main)"]
+    DEV -->|Mọi PR / Push| CI["ci.yml\nUnit Tests + License Audit + Build Check"]
+    DEV -->|Merge main / Tag| CL["changelog.yml\ngit-cliff tự sinh CHANGELOG.md"]
+    DEV -->|Push main (opencity-documents)| DOCS["docs.yml\nmkdocs build --strict to gh-pages"]
 ```
 
 - **Kiểm thử & Kiểm toán Giấy phép (`ci.yml`):** Chạy `pytest`, `check_direct_licenses.py`, `npm run check:catalog`, `npm run check:licenses` và `npm run build` tự động trên mỗi PR.
